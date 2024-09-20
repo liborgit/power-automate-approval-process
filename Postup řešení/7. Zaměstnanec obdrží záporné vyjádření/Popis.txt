@@ -1,0 +1,5 @@
+Stejně jako při kladném vyřízení žádosti, může nastat situace, kdy není možné zaměstnanci vyhovět.
+V takovém případě zaměstnavatel žádost o dovolenou v e-mailu zamítne a proces proběhne stejně, jako 
+při jejím schválení, jen s opačným výsledkem.
+
+Zaměstnanec následně obdrží e-mail s volitelným (nepovinným) vyjádřením zaměstnavatele.

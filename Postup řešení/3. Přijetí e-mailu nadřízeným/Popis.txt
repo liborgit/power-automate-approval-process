@@ -1,0 +1,3 @@
+Nadřízený obdržel žádost o dovolenou.
+
+Vidí zde stručně všechny potřebné informace - jméno žadatele a datum požadované dovolené.

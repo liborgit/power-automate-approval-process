@@ -1,0 +1,6 @@
+Libovolný uživatel z firemní sítě může obdržet nebo použít URL odkazující na tento formulář.
+
+Poté, co vyplní údaje, jsou vyplněné údaje odeslány do SharePoint 
+a je současně spuštěna flow v Power Automate.
+
+...další postup v následujícím adresáři.

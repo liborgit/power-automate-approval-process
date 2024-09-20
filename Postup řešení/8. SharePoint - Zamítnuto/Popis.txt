@@ -1,0 +1,2 @@
+V záznamu na SharePoint můžeme na druhém řádku vidět uložený stav nového požadavku, 
+který nyní skončil statusem "Zamítnuto".

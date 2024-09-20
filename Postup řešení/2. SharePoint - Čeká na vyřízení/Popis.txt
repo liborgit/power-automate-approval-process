@@ -1,0 +1,4 @@
+Požadavek na vyřízení žádosti o dovolenou čeká na vyřízení.
+
+V tuto chvíli již běží Power Automate flow a administrátor / nadřízený má ve svém e-mailu
+žádost zaměstnance ke schválení.

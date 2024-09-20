@@ -1,0 +1,113 @@
+{
+  "schema": "1.0",
+  "details": {
+	"displayName": "zadost-o-dovolenou",
+	"description": "",
+	"createdTime": "2024-09-20T16:40:44.76593Z",
+	"packageTelemetryId": "example-telemetry-id",
+	"creator": "N/A",
+	"sourceEnvironment": ""
+  },
+  "resources": {
+	"a8456bdf-3855-40fd-95e8-ea43e253b850": {
+	  "type": "Microsoft.Flow/flows",
+	  "suggestedCreationType": "Update",
+	  "creationType": "Existing, New, Update",
+	  "details": {
+		"displayName": "Žádost o dovolenou"
+	  },
+	  "configurableBy": "User",
+	  "hierarchy": "Root",
+	"dependsOn": [
+		"example-dependency-id-1",
+		"example-dependency-id-2",
+		"example-dependency-id-3",
+		"example-dependency-id-4",
+		"example-dependency-id-5",
+		"example-dependency-id-6",
+		"example-dependency-id-7"
+	]
+	},
+	"5e856be1-dd57-4036-9e8b-e1c39d25b5a3": {
+	  "id": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+	  "name": "shared_sharepointonline",
+	  "type": "Microsoft.PowerApps/apis",
+	  "suggestedCreationType": "Existing",
+	  "details": {
+		"displayName": "SharePoint",
+		"iconUri": "https://connectoricons-prod.azureedge.net/u/jayawan/releases/v1.0.1697/1.0.1697.3786/sharepointonline/icon.png"
+	  },
+	  "configurableBy": "System",
+	  "hierarchy": "Child",
+	  "dependsOn": []
+	},
+	"22a49745-aecd-4028-b55f-ea477937a254": {
+	  "type": "Microsoft.PowerApps/apis/connections",
+	  "suggestedCreationType": "Existing",
+	  "creationType": "Existing",
+	  "details": {
+		"displayName": "example@example.com",
+		"iconUri": "https://connectoricons-prod.azureedge.net/u/jayawan/releases/v1.0.1697/1.0.1697.3786/sharepointonline/icon.png"
+	  },
+	  "configurableBy": "User",
+	  "hierarchy": "Child",
+	  "dependsOn": [
+		"5e856be1-dd57-4036-9e8b-e1c39d25b5a3"
+	  ]
+	},
+	"2040af1d-0174-40e5-b075-34b75fc5c4bb": {
+	  "id": "/providers/Microsoft.PowerApps/apis/shared_approvals",
+	  "name": "shared_approvals",
+	  "type": "Microsoft.PowerApps/apis",
+	  "suggestedCreationType": "Existing",
+	  "details": {
+		"displayName": "Schválení",
+		"iconUri": "https://connectoricons-prod.azureedge.net/u/laborbol/partial-builds/1711/1.0.1711.3876/approvals/icon.png"
+	  },
+	  "configurableBy": "System",
+	  "hierarchy": "Child",
+	  "dependsOn": []
+	},
+	"51f6aaa3-96f2-4400-a7f6-9691e0e5ae80": {
+	  "type": "Microsoft.PowerApps/apis/connections",
+	  "suggestedCreationType": "Existing",
+	  "creationType": "Existing",
+	  "details": {
+		"displayName": "Approvals",
+		"iconUri": "https://connectoricons-prod.azureedge.net/u/laborbol/partial-builds/1711/1.0.1711.3876/approvals/icon.png"
+	  },
+	  "configurableBy": "User",
+	  "hierarchy": "Child",
+	  "dependsOn": [
+		"2040af1d-0174-40e5-b075-34b75fc5c4bb"
+	  ]
+	},
+	"d4073bd1-d8ec-47d6-a769-094eee888fa7": {
+	  "id": "/providers/Microsoft.PowerApps/apis/shared_office365",
+	  "name": "shared_office365",
+	  "type": "Microsoft.PowerApps/apis",
+	  "suggestedCreationType": "Existing",
+	  "details": {
+		"displayName": "Office 365 Outlook",
+		"iconUri": "https://connectoricons-prod.azureedge.net/releases/v1.0.1706/1.0.1706.3851/office365/icon.png"
+	  },
+	  "configurableBy": "System",
+	  "hierarchy": "Child",
+	  "dependsOn": []
+	},
+	"8ac64646-cd51-4957-8288-1566df26fd54": {
+	  "type": "Microsoft.PowerApps/apis/connections",
+	  "suggestedCreationType": "Existing",
+	  "creationType": "Existing",
+	  "details": {
+		"displayName": "example@example.com",
+		"iconUri": "https://connectoricons-prod.azureedge.net/releases/v1.0.1706/1.0.1706.3851/office365/icon.png"
+	  },
+	  "configurableBy": "User",
+	  "hierarchy": "Child",
+	  "dependsOn": [
+		"d4073bd1-d8ec-47d6-a769-094eee888fa7"
+	  ]
+	}
+  }
+}

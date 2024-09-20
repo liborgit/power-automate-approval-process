@@ -1,0 +1,2 @@
+Zaměstnanci díky flow Power Automate automaticky dorazí e-mail o kladném vyřízení jeho žádosti
+včetně volitelného komentáře zaměstnavatele.

@@ -1,0 +1,207 @@
+{
+  "name": "example-flow-id",
+  "id": "/providers/Microsoft.Flow/flows/example-flow-id",
+  "type": "Microsoft.Flow/flows",
+  "properties": {
+	"apiId": "/providers/Microsoft.PowerApps/apis/shared_logicflows",
+	"displayName": "Žádost o dovolenou",
+	"definition": {
+	  "metadata": {
+		"workflowEntityId": null,
+		"processAdvisorMetadata": null,
+		"flowChargedByPaygo": null,
+		"flowclientsuspensionreason": "None",
+		"flowclientsuspensiontime": null,
+		"flowclientsuspensionreasondetails": null,
+		"creator": {
+		  "id": "example-user-id",
+		  "type": "User",
+		  "tenantId": "example-tenant-id"
+		},
+		"provisioningMethod": "FromDefinition",
+		"failureAlertSubscription": true,
+		"clientLastModifiedTime": "2024-09-20T15:59:55.4002064Z",
+		"connectionKeySavedTimeKey": "2024-09-20T15:59:55.4002064Z"
+	  },
+	  "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+	  "contentVersion": "1.0.0.0",
+	  "parameters": {
+		"$authentication": {
+		  "defaultValue": {},
+		  "type": "SecureObject"
+		},
+		"$connections": {
+		  "defaultValue": {},
+		  "type": "Object"
+		}
+	  },
+	  "triggers": {
+		"When_an_item_is_created": {
+		  "recurrence": {
+			"interval": 3,
+			"frequency": "Minute"
+		  },
+		  "splitOn": "@triggerOutputs()?['body/value']",
+		  "type": "OpenApiConnection",
+		  "inputs": {
+			"parameters": {
+			  "dataset": "https://example.sharepoint.com/sites/seznam-dovolene",
+			  "table": "example-table-id"
+			},
+			"host": {
+			  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+			  "connectionName": "shared_sharepointonline",
+			  "operationId": "GetOnNewItems"
+			},
+			"authentication": "@parameters('$authentication')"
+		  }
+		}
+	  },
+	  "actions": {
+		"Start_and_wait_for_an_approval": {
+		  "runAfter": {},
+		  "type": "OpenApiConnectionWebhook",
+		  "inputs": {
+			"parameters": {
+			  "approvalType": "Basic",
+			  "WebhookApprovalCreationInput/title": "Žádost o dovolenou od: @{triggerBody()?['Author']?['DisplayName']}",
+			  "WebhookApprovalCreationInput/assignedTo": "example@example.com",
+			  "WebhookApprovalCreationInput/details": "Počátek dovolené: @{triggerBody()?['Po_x010d__x00e1_tekdovolen_x00e9']}\nKonec dovolené: @{triggerBody()?['Konecdovolen_x00e9_']}",
+			  "WebhookApprovalCreationInput/enableNotifications": true,
+			  "WebhookApprovalCreationInput/enableReassignment": true
+			},
+			"host": {
+			  "apiId": "/providers/Microsoft.PowerApps/apis/shared_approvals",
+			  "connectionName": "shared_approvals",
+			  "operationId": "StartAndWaitForAnApproval"
+			},
+			"authentication": "@parameters('$authentication')"
+		  }
+		},
+		"Condition": {
+		  "actions": {
+			"Apply_to_each_2": {
+			  "foreach": "@body('Start_and_wait_for_an_approval')?['responses']",
+			  "actions": {
+				"Update_item_2": {
+				  "type": "OpenApiConnection",
+				  "inputs": {
+					"parameters": {
+					  "dataset": "https://example.sharepoint.com/sites/seznam-dovolene",
+					  "table": "example-table-id",
+					  "id": "@triggerBody()?['ID']",
+					  "item/Po_x010d__x00e1_tekdovolen_x00e9": "@triggerBody()?['Po_x010d__x00e1_tekdovolen_x00e9']",
+					  "item/Konecdovolen_x00e9_": "@triggerBody()?['Konecdovolen_x00e9_']",
+					  "item/Zam_x011b_stnanec": "@triggerBody()?['Author']?['DisplayName']",
+					  "item/Status_x017e__x00e1_dosti/Value": "Schváleno"
+					},
+					"host": {
+					  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+					  "connectionName": "shared_sharepointonline",
+					  "operationId": "PatchItem"
+					},
+					"authentication": "@parameters('$authentication')"
+				  }
+				}
+			  },
+			  "type": "Foreach"
+			}
+		  },
+		  "runAfter": {
+			"For_each": ["Succeeded"]
+		  },
+		  "else": {
+			"actions": {
+			  "Apply_to_each_1": {
+				"foreach": "@body('Start_and_wait_for_an_approval')?['responses']",
+				"actions": {
+				  "Update_item_1": {
+					"type": "OpenApiConnection",
+					"inputs": {
+					  "parameters": {
+						"dataset": "https://example.sharepoint.com/sites/seznam-dovolene",
+						"table": "example-table-id",
+						"id": "@triggerBody()?['ID']",
+						"item/Po_x010d__x00e1_tekdovolen_x00e9": "@triggerBody()?['Po_x010d__x00e1_tekdovolen_x00e9']",
+						"item/Konecdovolen_x00e9_": "@triggerBody()?['Konecdovolen_x00e9_']",
+						"item/Zam_x011b_stnanec": "@triggerBody()?['Author']?['DisplayName']",
+						"item/Status_x017e__x00e1_dosti/Value": "Zamítnuto"
+					  },
+					  "host": {
+						"apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+						"connectionName": "shared_sharepointonline",
+						"operationId": "PatchItem"
+					  },
+					  "authentication": "@parameters('$authentication')"
+					}
+				  }
+				},
+				"type": "Foreach"
+			  }
+			}
+		  },
+		  "expression": {
+			"and": [
+			  {
+				"equals": [
+				  "@body('Start_and_wait_for_an_approval')?['outcome']",
+				  "Approve"
+				]
+			  }
+			]
+		  },
+		  "type": "If"
+		},
+		"For_each": {
+		  "foreach": "@outputs('Start_and_wait_for_an_approval')?['body']?['responses']",
+		  "actions": {
+			"Send_an_email_(V2)": {
+			  "type": "OpenApiConnection",
+			  "inputs": {
+				"parameters": {
+				  "emailMessage/To": "@triggerBody()?['Author']?['Email']",
+				  "emailMessage/Subject": "Žádost o dovolenou - @{body('Start_and_wait_for_an_approval')?['outcome']}",
+				  "emailMessage/Body": "<p class=\"editor-paragraph\">Dobrý den, @{triggerBody()?['Author']?['DisplayName']},</p><br><p class=\"editor-paragraph\">vaše žádost o dovolenou byla vyřízena s výsledkem: @{body('Start_and_wait_for_an_approval')?['outcome']}.</p><p class=\"editor-paragraph\">Komentář nadřízeného: @{items('For_each')?['comments']}</p><br><p class=\"editor-paragraph\">S pozdravem,</p><p class=\"editor-paragraph\">Libor Oliva</p>",
+				  "emailMessage/Importance": "Normal"
+				},
+				"host": {
+				  "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+				  "connectionName": "shared_office365",
+				  "operationId": "SendEmailV2"
+				},
+				"authentication": "@parameters('$authentication')"
+			  }
+			}
+		  },
+		  "runAfter": {
+			"Start_and_wait_for_an_approval": ["Succeeded"]
+		  },
+		  "type": "Foreach"
+		}
+	  },
+	  "outputs": {}
+	},
+	"connectionReferences": {
+	  "shared_sharepointonline": {
+		"connectionName": "shared-sharepointonl-example-id",
+		"source": "Embedded",
+		"id": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+		"tier": "NotSpecified"
+	  },
+	  "shared_approvals": {
+		"connectionName": "shared-approvals-example-id",
+		"source": "Embedded",
+		"id": "/providers/Microsoft.PowerApps/apis/shared_approvals",
+		"tier": "NotSpecified"
+	  },
+	  "shared_office365": {
+		"connectionName": "shared-office365-example-id",
+		"source": "Embedded",
+		"id": "/providers/Microsoft.PowerApps/apis/shared_office365",
+		"tier": "NotSpecified"
+	  }
+	},
+	"flowFailureAlertSubscribed": false,
+	"isManaged": false
+  }
+}
